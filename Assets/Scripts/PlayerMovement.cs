@@ -13,13 +13,29 @@ public class PlayerMovement : MonoBehaviour
     bool jump  = false;
     bool crouch = false;
     // Update is called once per frame
+    [SerializeField] private bool isCharge = false;
     void Update()
     {
-        dirX = Input.GetAxisRaw("Horizontal")*RunSpeed;
+        Debug.Log(controller.charge_Jumpforce);
+
+       if(!isCharge)
+        {
+            dirX = Input.GetAxisRaw("Horizontal") * RunSpeed;
+        }
         dirY = Input.GetAxisRaw("Vertical");
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && controller.charge_Jumpforce<1000)
+        {
+            jump = false;
+            isCharge = true;
+        }
+        if(isCharge)
+        {
+            controller.charge_Jumpforce += 10;
+        }
+        if(Input.GetButtonUp("Jump") || controller.charge_Jumpforce >=   1000 )
         {
             jump = true;
+            isCharge = false;
         }
         if (Input.GetButtonDown("Crouch"))
         {
