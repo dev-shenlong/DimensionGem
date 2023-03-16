@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - Hills
   - 
   - 
   - 
@@ -39,6 +39,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Hills
+    uniqueID: 1443175311
+    locked: 0
+  - name: Bg2
+    uniqueID: 662280189
+    locked: 0
+  - name: Ground
+    uniqueID: 1294959179
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 1998557545
     locked: 0
