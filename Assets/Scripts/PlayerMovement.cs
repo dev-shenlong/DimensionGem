@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     {
         //dirX = Input.GetAxisRaw("Horizontal");
-        Debug.Log(controller.charge_Jumpforce);
+       // Debug.Log(controller.charge_Jumpforce);
 
        if(!isCharge)
         {
@@ -94,11 +94,12 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        if (rb.velocity.y>0.2f)
+        if (rb.velocity.y>1.14f)
         {
             state = MovementState.jumping;
+            Debug.Log(rb.velocity.y);
         }
-        else if (rb.velocity.y < -0.2f){
+        else if (rb.velocity.y < -1.14f){
             state = MovementState.falling;
 
         }
