@@ -12,13 +12,25 @@ public class PlayerMovement : MonoBehaviour
     float dirY;
     bool jump  = false;
     bool crouch = false;
+    private enum MovementState { idle,running,jumping,falling}
+    private Animator aanim;
+    private Rigidbody2D rb;
+    
 
     // Update is called once per frame
     [SerializeField] private bool isCharge = false;
     [SerializeField] private float maxJumpCharge = 500f;
     [SerializeField] private float JumpXSpeed = 60f;
-    void Update()
+
+     void Start()
     {
+        aanim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+    void Update()
+
+    {
+        //dirX = Input.GetAxisRaw("Horizontal");
         Debug.Log(controller.charge_Jumpforce);
 
        if(!isCharge)
@@ -50,13 +62,49 @@ public class PlayerMovement : MonoBehaviour
         {
             crouch = false;
         }
-            
+
+        UpdateAnimation();
+
+
     }
     private void FixedUpdate()
     {
         //move our character
         controller.Move(dirX*Time.fixedDeltaTime, crouch, jump);
         jump = false;  
+    }
+    private void UpdateAnimation()
+    {
+        MovementState state;
+         
+        if (dirX > 0f)
+        {
+            state = MovementState.running;
+            
+        }
+        else if (dirX < 0f)
+        {
+            state = MovementState.running;
+           
+        }
+        else
+        {
+            state = MovementState.idle;
+        }
+
+
+
+        if (rb.velocity.y>0.2f)
+        {
+            state = MovementState.jumping;
+        }
+        else if (rb.velocity.y < -0.2f){
+            state = MovementState.falling;
+
+        }
+        aanim.SetInteger("state", (int)state); 
+
+        
     }
 
 }
