@@ -15,12 +15,24 @@ public class PlayerMovement : MonoBehaviour
     private enum MovementState { idle,running,jumping,falling}
     private Animator aanim;
     private Rigidbody2D rb;
+
+
+    private bool canDash = true;
+    private bool isDashing;
+    private float Dashingpower =24f;
+    private float Dashingtime = 0.2f;
+    private float DashingCooldown = 1f;
+
     
 
     // Update is called once per frame
     [SerializeField] private bool isCharge = false;
     [SerializeField] private float maxJumpCharge = 500f;
     [SerializeField] private float JumpXSpeed = 60f;
+
+    //for dashing
+    [SerializeField] private TrailRenderer tr;
+
 
      void Start()
     {
@@ -31,7 +43,10 @@ public class PlayerMovement : MonoBehaviour
 
     {
         //dirX = Input.GetAxisRaw("Horizontal");
-       // Debug.Log(controller.charge_Jumpforce);
+        // Debug.Log(controller.charge_Jumpforce);
+
+        if (isDashing)
+        { return; }
 
        if(!isCharge)
         {
@@ -54,6 +69,12 @@ public class PlayerMovement : MonoBehaviour
             dirX = Input.GetAxisRaw("Horizontal") * JumpXSpeed;
 
         }
+
+        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+
+            StartCoroutine(Dash());
+        }
         if (Input.GetButtonDown("Crouch"))
         {
             crouch = true;
@@ -67,12 +88,49 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+
+
+
+
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        float originalgravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.velocity = new Vector2(transform.localScale.x * Dashingpower, 0f);
+        tr.emitting = true;
+        yield return new WaitForSeconds(Dashingtime);
+        tr.emitting = false;
+        rb.gravityScale = originalgravity;
+        isDashing = false;
+        yield return new WaitForSeconds(DashingCooldown);
+        canDash = true;
+
+
+
+    }
+
+
+
+
+
+
     private void FixedUpdate()
     {
+        if(isDashing)
+        {
+            return;
+        }
         //move our character
         controller.Move(dirX*Time.fixedDeltaTime, crouch, jump);
         jump = false;  
     }
+
+
+
+
+
     private void UpdateAnimation()
     {
         MovementState state;

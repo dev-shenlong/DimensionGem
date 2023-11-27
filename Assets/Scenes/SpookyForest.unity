@@ -327,10 +327,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 126074383}
-  RunSpeed: 40
+  RunSpeed: 60
   isCharge: 0
-  maxJumpCharge: 600
-  JumpXSpeed: 60
+  maxJumpCharge: 900
+  JumpXSpeed: 140
 --- !u!95 &126074390
 Animator:
   serializedVersion: 5
